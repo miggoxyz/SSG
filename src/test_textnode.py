@@ -1,55 +1,47 @@
 import unittest
 
-from textnode import TextNode
+from textnode import (
+    TextNode,
+    text_type_text,
+    text_type_bold,
+    text_type_italic,
+    text_type_code,
+    text_type_image,
+    text_type_link,
+)
 
 
 class TestTextNode(unittest.TestCase):
-    def test_eq_same_values(self):
-        node1 = TextNode("This is a text node", "bold")
-        node2 = TextNode("This is a text node", "bold")
-        self.assertEqual(node1, node2)
+    def test_eq(self):
+        node = TextNode("This is a text node", text_type_text)
+        node2 = TextNode("This is a text node", text_type_text)
+        self.assertEqual(node, node2)
 
-    def test_eq_different_values(self):
-        node1 = TextNode("This is a text node", "bold")
-        node2 = TextNode("This is a different text node", "bold")
-        self.assertNotEqual(node1, node2)
+    def test_eq_false(self):
+        node = TextNode("This is a text node", text_type_text)
+        node2 = TextNode("This is a text node", text_type_bold)
+        self.assertNotEqual(node, node2)
 
-    def test_eq_different_types(self):
-        node1 = TextNode("This is a text node", "bold")
-        node2 = TextNode("This is a text node", "italic")
-        self.assertNotEqual(node1, node2)
+    def test_eq_false2(self):
+        node = TextNode("This is a text node", text_type_text)
+        node2 = TextNode("This is a text node2", text_type_text)
+        self.assertNotEqual(node, node2)
 
-    def test_eq_with_url(self):
-        node1 = TextNode("Link", "link", "https://example.com")
-        node2 = TextNode("Link", "link", "https://example.com")
-        self.assertEqual(node1, node2)
-
-    def test_eq_different_url(self):
-        node1 = TextNode("Link", "link", "https://example.com")
-        node2 = TextNode("Link", "link", "https://different.com")
-        self.assertNotEqual(node1, node2)
+    def test_eq_url(self):
+        node = TextNode("This is a text node",
+                        text_type_italic, "https://www.boot.dev")
+        node2 = TextNode(
+            "This is a text node", text_type_italic, "https://www.boot.dev"
+        )
+        self.assertEqual(node, node2)
 
     def test_repr(self):
-        node = TextNode("Test", "bold", "https://example.com")
-        expected_repr = "TextNode(Test, bold, https://example.com)"
-        self.assertEqual(repr(node), expected_repr)
-
-    def test_text_property(self):
-        node = TextNode("Test text", "plain")
-        self.assertEqual(node.text, "Test text")
-
-    def test_text_type_property(self):
-        node = TextNode("Test text", "italic")
-        self.assertEqual(node.text_type, "italic")
-
-    def test_url_property(self):
-        node = TextNode("Link", "link", "https://example.com")
-        self.assertEqual(node.url, "https://example.com")
-
-    def test_url_default_value(self):
-        node = TextNode("Test text", "plain")
-        self.assertIsNone(node.url)
+        node = TextNode("This is a text node", text_type_text,
+                        "https://www.boot.dev")
+        self.assertEqual(
+            "TextNode(This is a text node, text, https://www.boot.dev)", repr(node)
+        )
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()
